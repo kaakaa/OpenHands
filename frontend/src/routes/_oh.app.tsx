@@ -27,12 +27,12 @@ function App() {
 
   const dispatch = useDispatch();
 
-  const { selectedRepository } = useSelector(
+  const { selectedGitHubRepository } = useSelector(
     (state: RootState) => state.initalQuery,
   );
 
   const { data: latestGitHubCommit } = useLatestRepoCommit({
-    repository: selectedRepository,
+    repository: selectedGitHubRepository,
   });
 
   const secrets = React.useMemo(

@@ -9,13 +9,15 @@ import {
 import { ErrorObservation } from "#/types/core/observations";
 import { addErrorMessage, addUserMessage } from "#/state/chat-slice";
 import {
-  getCloneRepoCommand,
+  getCloneRepoCommand as getCloneGitHubRepoCommand,
+  getCloneRepositoryCommand,
   getGitHubTokenCommand,
 } from "#/services/terminal-service";
 import {
   clearFiles,
   clearInitialQuery,
-  clearSelectedRepository,
+  clearSelectedGitHubRepository,
+  clearGitRepositoryUrl,
   setImportedProjectZip,
 } from "#/state/initial-query-slice";
 import store, { RootState } from "#/store";
@@ -55,7 +57,7 @@ export function EventHandler({ children }: React.PropsWithChildren) {
   const endSession = useEndSession();
 
   // FIXME: Bad practice - should be handled with state
-  const { selectedRepository } = useSelector(
+  const { selectedGitHubRepository, gitRepositoryURL } = useSelector(
     (state: RootState) => state.initalQuery,
   );
 
@@ -122,10 +124,14 @@ export function EventHandler({ children }: React.PropsWithChildren) {
 
     if (status === WsClientProviderStatus.ACTIVE) {
       let additionalInfo = "";
-      if (gitHubToken && selectedRepository) {
-        send(getCloneRepoCommand(gitHubToken, selectedRepository));
-        additionalInfo = `Repository ${selectedRepository} has been cloned to /workspace. Please check the /workspace for files.`;
-        dispatch(clearSelectedRepository()); // reset selected repository; maybe better to move this to '/'?
+      if (gitHubToken && selectedGitHubRepository) {
+        send(getCloneGitHubRepoCommand(gitHubToken, selectedGitHubRepository));
+        additionalInfo = `GitHub Repository ${selectedGitHubRepository} has been cloned to /workspace. Please check the /workspace for files.`;
+        dispatch(clearSelectedGitHubRepository()); // reset selected github repository; maybe better to move this to '/'?
+      } else if (gitRepositoryURL) {
+        send(getCloneRepositoryCommand(gitRepositoryURL));
+        additionalInfo = `Repository ${gitRepositoryURL} has been cloned to /workspace. Please check the /workspace for files.`;
+        dispatch(clearGitRepositoryUrl());
       }
       // if there's an uploaded project zip, add it to the chat
       else if (importedProjectZip) {

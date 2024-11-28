@@ -1,16 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { clear } from "node:console";
 
 type SliceState = {
   files: string[]; // base64 encoded images
   initialQuery: string | null;
-  selectedRepository: string | null;
+  selectedGitHubRepository: string | null;
+  gitRepositoryURL: string | null;
   importedProjectZip: string | null; // base64 encoded zip
 };
 
 const initialState: SliceState = {
   files: [],
   initialQuery: null,
-  selectedRepository: null,
+  selectedGitHubRepository: null,
+  gitRepositoryURL: null,
   importedProjectZip: null,
 };
 
@@ -33,11 +36,17 @@ export const selectedFilesSlice = createSlice({
     clearInitialQuery(state) {
       state.initialQuery = null;
     },
-    setSelectedRepository(state, action: PayloadAction<string | null>) {
-      state.selectedRepository = action.payload;
+    setSelectedGitHubRepository(state, action: PayloadAction<string | null>) {
+      state.selectedGitHubRepository = action.payload;
     },
-    clearSelectedRepository(state) {
-      state.selectedRepository = null;
+    clearSelectedGitHubRepository(state) {
+      state.selectedGitHubRepository = null;
+    },
+    setGitRepositoryUrl(state, action: PayloadAction<string | null>) {
+      state.gitRepositoryURL = action.payload;
+    },
+    clearGitRepositoryUrl(state) {
+      state.gitRepositoryURL = null;
     },
     setImportedProjectZip(state, action: PayloadAction<string | null>) {
       state.importedProjectZip = action.payload;
@@ -51,8 +60,10 @@ export const {
   clearFiles,
   setInitialQuery,
   clearInitialQuery,
-  setSelectedRepository,
-  clearSelectedRepository,
+  setSelectedGitHubRepository,
+  clearSelectedGitHubRepository,
+  setGitRepositoryUrl,
+  clearGitRepositoryUrl,
   setImportedProjectZip,
 } = selectedFilesSlice.actions;
 export default selectedFilesSlice.reducer;

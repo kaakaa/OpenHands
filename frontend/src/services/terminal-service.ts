@@ -18,3 +18,11 @@ export function getCloneRepoCommand(gitHubToken: string, repository: string) {
   const event = getTerminalCommand(command, true);
   return event;
 }
+
+export function getCloneRepositoryCommand(repository: string) {
+  const elements = repository.split("/");
+  const dirName = elements[elements.length - 1];
+  const command = `git clone ${repository} ${dirName} ; cd ${dirName} ; git checkout -b openhands-workspace`;
+  const event = getTerminalCommand(command, true);
+  return event;
+}

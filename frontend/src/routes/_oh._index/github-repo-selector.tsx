@@ -1,6 +1,6 @@
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { useDispatch } from "react-redux";
-import { setSelectedRepository } from "#/state/initial-query-slice";
+import { setSelectedGitHubRepository } from "#/state/initial-query-slice";
 
 interface GitHubRepositorySelectorProps {
   onSelect: () => void;
@@ -17,14 +17,14 @@ export function GitHubRepositorySelector({
     const repo = repositories.find((r) => r.id.toString() === id);
     if (repo) {
       // set query param
-      dispatch(setSelectedRepository(repo.full_name));
+      dispatch(setSelectedGitHubRepository(repo.full_name));
       onSelect();
     }
   };
 
   const handleClearSelection = () => {
     // clear query param
-    dispatch(setSelectedRepository(null));
+    dispatch(setSelectedGitHubRepository(null));
   };
 
   return (

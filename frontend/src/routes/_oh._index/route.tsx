@@ -6,12 +6,15 @@ import { TaskForm } from "./task-form";
 import { HeroHeading } from "./hero-heading";
 import { setImportedProjectZip } from "#/state/initial-query-slice";
 import { GitHubRepositoriesSuggestionBox } from "#/components/github-repositories-suggestion-box";
+import { CloneGitRepositoryModal } from "#/components/modals/clone-git-repository-modal";
+import { ModalBackdrop } from "#/components/modals/modal-backdrop";
 import { convertZipToBase64 } from "#/utils/convert-zip-to-base64";
 import { useUserRepositories } from "#/hooks/query/use-user-repositories";
 import { useGitHubUser } from "#/hooks/query/use-github-user";
 import { useGitHubAuthUrl } from "#/hooks/use-github-auth-url";
 import { useConfig } from "#/hooks/query/use-config";
 import { useAuth } from "#/context/auth-context";
+import ModalButton from "#/components/buttons/modal-button";
 
 function Home() {
   const { token, gitHubToken } = useAuth();
@@ -32,9 +35,20 @@ function Home() {
     gitHubClientId: config?.GITHUB_CLIENT_ID || null,
   });
 
+  const [cloneGitRepositoryModalOpen, setCloneGitRepositoryModalOpen] = React.useState(false);
+
   React.useEffect(() => {
     if (token) navigate("/app");
   }, [location.pathname]);
+
+  const handleCloneGitRepository = () => {
+    setCloneGitRepositoryModalOpen(true);
+  };
+
+  const handleCloneGitRepositoryModalClose = () => {
+    setCloneGitRepositoryModalOpen(false);
+    formRef.current?.requestSubmit()
+  }
 
   return (
     <div
@@ -55,6 +69,28 @@ function Home() {
             gitHubAuthUrl={gitHubAuthUrl}
             user={user || null}
             // onEndReached={}
+          />
+                    <SuggestionBox
+            title="+ Clone repository"
+            content={
+              <label
+                htmlFor="clone-repository"
+                className="w-full flex justify-center"
+              >
+                <ModalButton
+                  text="Input repository"
+                  className="bg-[#791B80] w-full"
+                  onClick={handleCloneGitRepository}
+                />
+                { cloneGitRepositoryModalOpen && (
+                  <ModalBackdrop onClose={() => handleCloneGitRepositoryModalClose()}>
+                    <CloneGitRepositoryModal
+                      onClose={() => handleCloneGitRepositoryModalClose()}
+                    />
+                  </ModalBackdrop>
+                )}
+              </label>
+            }
           />
           <SuggestionBox
             title="+ Import Project"

@@ -19,20 +19,20 @@ export function Controls({
   lastCommitData,
 }: ControlsProps) {
   const { gitHubToken } = useAuth();
-  const { selectedRepository } = useSelector(
+  const { selectedGitHubRepository } = useSelector(
     (state: RootState) => state.initalQuery,
   );
 
   const projectMenuCardData = React.useMemo(
     () =>
-      selectedRepository && lastCommitData
+      selectedGitHubRepository && lastCommitData
         ? {
-            repoName: selectedRepository,
+            repoName: selectedGitHubRepository,
             lastCommit: lastCommitData,
             avatar: null, // TODO: fetch repo avatar
           }
         : null,
-    [selectedRepository, lastCommitData],
+    [selectedGitHubRepository, lastCommitData],
   );
 
   return (

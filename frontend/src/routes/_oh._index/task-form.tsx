@@ -23,7 +23,7 @@ export const TaskForm = React.forwardRef<HTMLFormElement>((_, ref) => {
   const navigation = useNavigation();
   const navigate = useNavigate();
 
-  const { selectedRepository, files } = useSelector(
+  const { selectedGitHubRepository, files } = useSelector(
     (state: RootState) => state.initalQuery,
   );
 
@@ -50,12 +50,12 @@ export const TaskForm = React.forwardRef<HTMLFormElement>((_, ref) => {
   };
 
   const placeholder = React.useMemo(() => {
-    if (selectedRepository) {
-      return `What would you like to change in ${selectedRepository}?`;
+    if (selectedGitHubRepository) {
+      return `What would you like to change in ${selectedGitHubRepository}?`;
     }
 
     return "What do you want to build?";
-  }, [selectedRepository]);
+  }, [selectedGitHubRepository]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

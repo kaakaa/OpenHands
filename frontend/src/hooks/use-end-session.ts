@@ -6,7 +6,10 @@ import {
   setScreenshotSrc,
   setUrl,
 } from "#/state/browser-slice";
-import { clearSelectedRepository } from "#/state/initial-query-slice";
+import {
+  clearGitRepositoryUrl,
+  clearSelectedGitHubRepository
+} from "#/state/initial-query-slice";
 
 export const useEndSession = () => {
   const navigate = useNavigate();
@@ -18,7 +21,8 @@ export const useEndSession = () => {
    */
   const endSession = () => {
     clearToken();
-    dispatch(clearSelectedRepository());
+    dispatch(clearSelectedGitHubRepository());
+    dispatch(clearGitRepositoryUrl())
 
     // Reset browser state to initial values
     dispatch(setUrl(browserInitialState.url));
